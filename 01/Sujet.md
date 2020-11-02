@@ -121,7 +121,7 @@ fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
 Faites en sorte d'avoir les comportements 3 affichages différents :
 
 - Le `vec0` vide, le `vec1` plein
-- Les deux vecteurs soit pleins
+- Les deux vecteurs sont pleins (pas forcement les meme valeurs)
 - La fonction `fill_vec` doit ne rien renvoyer.
 
 ## 7. Guess game
