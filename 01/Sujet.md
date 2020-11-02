@@ -121,14 +121,14 @@ fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
 Faites en sorte d'avoir les comportements 3 affichages différents :
 
 - Le `vec0` vide, le `vec1` plein
-- Les deux vecteurs aux mêmes valeurs
+- Les deux vecteurs soit pleins
 - La fonction `fill_vec` doit ne rien renvoyer.
 
 ## 7. Guess game
 
 Il est temps de mettre en place tout ce que nous avons vu essaye de mettre en place un jeu de devinette de nombre avec tout ce que tu as vu depuis le début.
 
-Le nombre a deviné passé en paramètre du programme. Voici un exemple de code pour récupérer les paramètres : 
+Le nombre a deviner passé en paramètre du programme. Voici un exemple de code pour récupérer les paramètres : 
 ```rust
 use std::env;
 fn main() {
