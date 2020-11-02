@@ -122,7 +122,7 @@ Faites en sorte d'avoir les comportements 3 affichages différents :
 
 - Le `vec0` vide, le `vec1` plein
 - Les deux vecteurs aux mêmes valeurs
-- La fonction `fill_vec` doit ne rien renvoyé.
+- La fonction `fill_vec` doit ne rien renvoyer.
 
 ## 7. Guess game
 
