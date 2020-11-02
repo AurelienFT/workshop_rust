@@ -61,7 +61,7 @@ Le RUST possède quelques mots clés de structures de contrôles.
 *[Documentation structures de contrôle](https://doc.rust-lang.org/book/ch03-05-control-flow.html)*
 
 Dans votre main ajoutez une expression `if`. Utilisez cette template et modifie-là pour qu'elle compile et qu'elle affiche `Réussi` :
-```
+```rust
 fn main() {
   let x = ...
   if x < ... {
@@ -72,7 +72,7 @@ fn main() {
 }
 ```
 Vous pouvez aussi utiliser les structures de contrôles pour initialiser les variables. Complète cette template qui utilise le mot clé `loop` pour qu'elle affiche `Salut` :
-```
+```rust
 fn main() {
     let mut test: String = String::new();
 
@@ -93,7 +93,7 @@ fn main() {
 Cette partie est assez complexe à comprendre c'est pour cela qu'il faudra faire beaucoup de lecture. Lis la page de la [documentation RUST dessus](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html).
 
 Ensuite fais compiler ce code sans modifier les lignes d'affichages (un `Vec` est un vecteur et fonctionne comme une `String` mais avec n'importe quel type) :
-```
+```rust
 fn main() {
     let vec0 = Vec::new();
 
@@ -117,6 +117,12 @@ fn fill_vec(vec: Vec<i32>) -> Vec<i32> {
     vec
 }
 ```
+
+Faites en sorte d'avoir les comportements 3 affichages différents :
+
+- Le `vec0` vide, le `vec1` plein
+- Les deux vecteurs aux mêmes valeurs
+- La fonction `fill_vec` doit ne rien renvoyé.
 
 ## 7. Guess game
 
