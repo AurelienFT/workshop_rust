@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Rust</title>
+
+		<meta name="description" content="A language for writing memory safe and efficient programs">
+		<meta name="author" content="Manish Goregaokar / Traduction FR: Aurélien FOUCAULT">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+        <style>
+            pre, code {
+                overflow: visible;
+            }
+            ::-webkit-scrollbar { 
+                 display: none; 
+            }
+            section {
+/*            	width:1200px;
+            	left:-600px;*/
+            }
+        </style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+<section>
+	<h1>Rust</h1>
+	<h3>Le langage du futur sûr et efficace pour la mémoire</h3>
+	<p>
+		<small><a href="http://twitter.com/Manishearth">Source: @Manishearth</a></small>
+	</p>
+	<p>
+		<small><a href="http://twitter.com/AurelienFCLT">Traduction FR: @AurelienFCLT</a></small>
+	</p>
+</section>
+<section>
+	<section>
+	<h2>Prélude: C++ problèmes</h2>
+	<ul>
+		<li>Dangling pointers</li>
+		<li>Iterator invalidation</li>
+		<li>Thread safety</li>
+
+	</ul>
+	</section>
+	<section>
+	<h2>Dangling pointers</h2>
+	<pre><code class="c" data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+int* abc() {
+	int x = 1;
+	return &amp;x;
+}
+	</code></pre>
+	</section>
+	<section>
+	<h2>Iterator invalidation</h2>
+	<pre><code class="c" data-trim style="font-size: 18px; margin-top: 20px;">
+// Création du vecteur
+vector&ltint> x;
+x.push_back(1);
+x.push_back(2);
+x.push_back(3);
+
+// Creer un itérator
+vector&lt;int>::iterator itr = x.begin();
+
+int j=0;
+for (itr; itr !=x.end(); itr++) {
+	x.push_back(j); // Uh oh!
+	j++;
+	cout << j << " .. ";
+}
+	</code></pre>
+	<br>
+	<small>Source <a href="http://stackoverflow.com/questions/5638323/modifying-a-data-structure-while-iterating-over-it"> Stack Overflow question</a>, par <a href="http://stackoverflow.com/users/620189/user620189">user620189</a></small>
+	</section>
+</section>
+<section>
+	<section>
+	<h2>Pourquoi est-ce un problème ?</h2>
+	<ul>
+		<li>SEGFAULT, SEGFAULT, SEGFAULT (Ou: runtime error)</li>
+		<li>Source de problèmes fréquentes dans des navigateurs ou autres applications</li>
+		<li>Les solutions existantes pour sécuriser sont lentes et ont besoin d'un 'gargabe collector' en plus</li>
+	</ul>
+	<img src="heartbleed.png">
+	</section>
+	<section>
+		<img src="xkcd-segfault.png">
+	</section>
+</section>
+<section>
+	<img src="rust.png" style="max-height:75%; max-width:75%">  
+</section>
+<section>
+	<section>
+		<h1>Les basiques du Rust</h1>
+	</section>
+	<section>
+		<h2>If, boucles, fonctions</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+if a > 1 {
+	println!("{:?}", a);
+}
+
+let mut i: i32 = 0;
+loop {
+	if i > 10 { break; }
+	i += 1;
+	println!("{:?}", i);
+}
+
+fn multiply(x: i32, y: i32) -> i32 {
+	return x*y // Le return n'est pas nécessaire, l'explication plus tard.
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Contrôle du code</h2>
+	<p>Les points virgules ont un sens!</p>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let b = 3i32;
+let a = if b > 1 {
+	let mut c = b - 5;
+	c = c * b; // Retirer les points virgules ici vont causer des erreurs.
+	c // Ici c est "retourné" car il n'y a pas de points virgules.
+} else {
+	1i32
+};
+
+fn greater(a: i32, b: i32) -> i32 {
+	if a > b {
+		  a
+	} else {
+		  b
+	}
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Matching</h2>
+	<p>Switch-case se refait une nouvelle beauté</p>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let number = 5u32;
+let size = match number {
+	0 => "none",
+	2 | 3 => "minuscule",
+	4...7 => "petit",	
+	8...20 => "moyen",
+	_ => "large"
+};
+// Plusieurs déclarations dans un match fonctionnent!
+match number {
+	2 | 8 | 9 => {
+	  let mut c = 1;
+	  c += number;
+	  println!("Le nombre incrementé est {}", c);
+	},
+	_ => println!("Nous n'avons pas la possibilité d'augmenter ce nombre, désolé")
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Destruction</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let pair = (4u32, 5u32);
+let (a, b) = pair; // a=4, b=5
+let (b, a) = (a, b); // Echange!
+let smaller = match pair {
+	(x, y) if x &lt; y => x,
+	(_, y) => y
+};
+
+match pair {
+	(0, 0) => println!("Origine"),
+	(0, y) => println!("Y, coordonnée {}", y),
+	(x, 0) => println!("X, coordonnée {}", x),
+	(x, y) => {
+	  let distance = ((x*x + y*y) as f32).sqrt();
+	  println!("Le point est à ({}, {}), et {} unités de distance avec l'origine ", x, y, distance);
+	}
+};
+	</code></pre>
+	</section>
+</section>
+
+<section>
+	<section>
+		<h1>Types de données</h1>
+	</section>
+	<section>
+		<h2>Structures</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+struct Point {
+	pub x: i32,
+	pub y: i32
+}
+
+let p = Point {x: 0, y: 0};
+println!("La coordonnée X est {}", p.x)
+	</code></pre>
+	</section>
+	<section>
+		<h2>Enums</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+enum Forme {
+	Cercle(Point, u32),
+	Rectangle(Point, Point)
+}
+
+// Example
+enum Option&lt;T> {
+	Some(T),
+	None
+}
+
+let origin = Point {x: 0, y: 0};
+let circ = Shape::Circle(origin, 10);
+	</code></pre>
+	</section>
+	<section>
+		<h2>Matching!</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let perimeter = match shape {
+	Circle(_, r) => 2*pi*r,
+	Rectangle(p1, p2) => 2*abs(p2.x - p1.x) + 2*abs(p2.y - p1.y)
+}
+
+// On peut aussi matcher sur des structures ! 
+let perimeter = match shape {
+	Circle(_, r) => 2*pi*r,
+	Rectangle(Point {x: x1, y: y1}, Point {x: x2, y: y2}) => 
+	  2*abs(x2 - x1) + 2*abs(y2 - y1)
+}
+
+// Les patternes imbriqués fonctionnent
+match point {
+	Point {x: 2...6, y: -1...5} => println!("J'aime ce point"),
+	_ => println!("Je n'aime pas ce point")
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Généricité</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+enum Option&lt;T> {
+	Some(T),
+	None
+}
+
+fn maybe_sqrt(x: i32) -> Option&lt;u32> {
+	if x >= 0 {
+	  Some(sqrt(x) as u32)
+	} else {
+	  None
+	}
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Implémentations</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+impl Point {
+	fn distance(&self) -> f32 { // Appelé avec point.distance()
+	    ((self.x*self.x + self.y*self.y) as f32).sqrt()
+	}
+	fn random() -> Point { // Appelé avec Point::random()
+	  Point {
+	    x: 4, // Choisis au hasard
+	    y: 4  // Oui vraiment !!
+	  }
+	}
+}
+
+	</code></pre>
+	</section>
+	<section>
+		<h2>Traits</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+trait Pointy {
+        fn poke(&self, at: &str);
+        // Les corps de fonctions peuvent être définis ici
+}
+
+impl Pointy for Point {
+        fn poke(&self, at: &str) {
+                println!("Poked {}", at);
+        }
+}
+
+fn poke_forever&lt;T: Pointy>(pointy: T, at: &str) {
+        loop {
+         pointy.poke(at)
+        }
+}
+
+	</code></pre>
+	</section>
+</section>
+
+
+<section>
+	<section>
+		<h1>Management de la <br>mémoire!</h1>
+		<h3>La partie cool</h3>
+	</section>
+	<section>
+		<h2>Déplacements et copies</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let x = 5i8;
+let y = x;
+println!("x is {:?}", x); // y a été copié depuis x
+
+let x = vec![1u8, 2u8, 3u8]; // Un vecteur
+let y = x; // Le vecteur a été "déplacé"
+println!("y is {:?}", y);
+// Ne fonctionne pas car la "propriété" du vecteur est à y
+// println!("x is {}", x)
+
+fn abc(x: Vec&lt;u8>) {
+    // Fais quelque chose
+}
+let myvec = vec![1u8, 2u8, 3u8];
+abc(myvec); // myvec déplacé dans la fonction, ne peut pas être utilisé après.
+	</code></pre>
+	</section>
+	<section>
+		<h2>Borrowing</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let x = vec![1u8, 2u8, 3u8];
+let y = &x; // Le vecteur a été "emprunté"
+let c = x.clone(); // Copie explicite
+println!("x vaut {:?}", x);
+println!("y vaut {:?}", *y);
+
+fn abc(x: &Vec&lt;u8>) {
+    // Fais quelque chose
+}
+let myvec = vec![1u8,2u8,3u8];
+abc(&myvec); // Passe une référence "emprunté"
+// On peut encore utilisé le vecteur ici !!!
+	</code></pre>
+	</section>
+	<section>
+		<h2>Borrowing & mutabilité</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let mut x = vec![1u8,2u8,3u8];
+{
+  let y = &x; // Le pointeur a été "emprunté"
+  // x.push(1); // Pas autorisé, x est emprunté et ne peut pas être modifié
+  // y.push(1); // Pas autorisé, y n'est pas modifiable
+}
+x.push(1); // L'emprunt peut être "retourné", nous pouvons la modifier maintenant
+
+let mut x = vec![1u8,2u8,3u8];
+{
+  let y = &mut x; // Le ponteur a été "emprunté, de manière modifiable
+  // x.push(1); // N'est pas autorisé, x est emprunté et ne peut pas être modifié
+  // println!("x vaut {}", x) // Pas autorisé non plus, y a le pouvoir
+  y.push(1); // Autorisé, y une reférence modifiable
+}
+x.push(1) // L'emprunt a été "retourné", on peut maintenant la modifier
+	</code></pre>
+	</section>
+	<section>
+		<h2>Propriété et implementations</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+struct Polygon {points: Vec&ltPoint>};
+impl Point {
+	// Cette fonction déplace
+	fn draw_move(self) {
+	    // ...
+	}
+	// Cette fonction emprunte
+	fn draw_borrow(&self) {
+	    // ...
+	    // Après l'appel de p.draw_borrow() vous pouvez encore utiliser p
+	}
+	// Cette fonction emprunte une valeur modifiable
+	fn draw_borrow_mut(&mut self) {
+	    // ...
+	    // Je peux modifier self ici
+	}
+}
+
+// (*polygon).draw_borrow() dereference not necessary
+	</code></pre>
+	</section>
+	<section>
+		<h2>La heap</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let mut x = Box::new(1); // Sur la heap
+*x = 2;
+
+// Type Box&lt;u32>
+// Déplacé et non copié
+
+fn abc() {
+	let x = Box::new(1); // malloc() invoqué
+	// Faire des truc avec x ou *x
+	// free() invoqué
+}
+
+fn def() -> Box&lt;u32>{
+	let x = Box::new(1); // malloc() invoqué
+	// Faire des truc avec x ou *x
+	x // x retourné au propriétaire initial
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Destruction et assignation par reference</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let pair = (Box::new(1), Box::new(2));
+let (a, b) = pair;
+// The boxes were moved out of `pair`, cannot use it anymore
+
+let pair = (Box::new(1), Box::new(2));
+{
+ let (ref a, ref b) = pair;
+ // a, b are borrowed references now, so everything is fine
+ // use `ref mut` for mutable references
+}
+
+// Works in match statements too!
+let maybe_heap = Some(Box::new(1));
+match maybe_heap {
+	Some(ref x) => println!("{}", x),
+	None => println!("No variable")
+}
+	</code></pre>
+	</section>
+	<section>
+		<h2>Strings et tableaux</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+let mut fixed_len_vec = [1,2,3]; // Du type [u32, ..3]
+fixed_len_vec[1] = 2;
+let mut buffer = vec![1,2,3]; // Du type Vec&lt;u32>
+buffer.push(20); // Maintenant c'est de taille 4!
+let slice = &buffer[0..2]; // Du type &[u32]
+let slice = &[1,2,3]; // Pareil
+
+let owned = "Manish".to_string(); // Du type String
+let static_slice = "Manish"; // type `&'static str`
+let slice = &owned[0..3]; // type &str
+	</code></pre>
+	</section>
+	<section>
+		<h2>Unsafe</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+extern crate core;
+use std::{mem, ptr};
+fn main() {
+ let y = *dangle() + 1;
+ // Segfault.
+}
+
+fn dangle() -> Box&lt;u32> {
+ unsafe {
+  // Null pointers!
+  let mut p: *mut int = ptr::null_mut();
+  let b = Box::new(1u32); // Heap memory, will be deallocated at the end of this function
+  ptr::write(p, *b);
+  mem::transmute(p) // Converts to box and .. uh oh .. returns!
+ }
+}
+	</code></pre>
+	</section>	
+	<section>
+		<img src="trustme.png">
+	</section>
+	<section>
+		<h2>D'autres fonctionnalités...</h2>
+		<ul>
+			<li>Thread safety (data races)</li>
+			<li>Abstractions puissantes et sans couts</li>
+			<li>Gestion d'erreur avec le type Result</li>
+			<li>Constantes et types associés</li>
+			<li>Closures</li>
+			<li>Plugin ecosystème (lints et extensions fournies par le langage)</li>
+		</ul>
+	</section>
+	<section>
+		<h2>Library status</h2>
+		<ul>
+			<li>HTTP: <a href="http://hyper.rs/">hyper</a>, <a href="https://github.com/frewsxcv/tiny-http">tiny-http</a>, <a href="https://github.com/iron/iron">Iron</a> (framework)</li>
+			<li>Game development: <a href="https://github.com/PistonDevelopers/piston">Piston</a></li>
+			<li><a href="http://github.com/servo/servo/">Servo</a> (browser engine)</li>
+			<li>HTML parsing: <a href="https://crates.io/crates/html5ever">html5ever</a></li>
+			<li><a href="https://crates.io/crates/regex">regex</a>, <a href="https://crates.io/crates/xml-rs">xml-rs</a><a href="https://crates.io/crates/gl_generator"> OpenGL Bindings</a>
+			<a href="https://crates.io/crates/glutin">glutin</a>, <a href="https://crates.io/crates/rust-crypto">crypto</a>, <a href="https://crates.io/crates/serde">serialization</a></li>
+			<li> .. <a href="http://crates.io">and many, many more!</a></li>
+		</ul>
+	</section>
+	<section>
+	<h2>Ressources</h2>
+		<ul>
+			<li><a href="http://doc.rust-lang.org/book">http://doc.rust-lang.org/book</a></li>
+			<li><a href="http://rustbyexample.com/">http://rustbyexample.com/</a></li>
+			<li><a href="http://doc.rust-lang.org/">http://doc.rust-lang.org/</a></li>
+			<li><a href="http://manishearth.github.io/Presentations/Rust">http://manishearth.github.io/Presentations/Rust</a></li>
+			<li><a href="http://users.rust-lang.org/">http://users.rust-lang.org/</a></li>
+			<li><a href="http://reddit.com/r/rust/">http://reddit.com/r/rust/</a></li>
+		</ul>
+	</section>
+	<section>
+		<h1>Merci!</h1>
+	</section>
+</section>
+<section>
+	<section>
+		<h2>[Extra slides]</h2>
+	</section>
+	<section>
+		<h2>Thread safety</h2>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+use std::sync::mpsc::*;
+use std::thread::spawn;
+let (tx, rx) = channel();
+
+spawn(move || {
+	tx.send(1); // works!
+});
+
+let x = rx.recv();
+
+	</code></pre>		
+	</section>
+
+	<section>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+use std::sync::mpsc::*;
+use std::thread::spawn;
+let (tx, rx) = channel();
+
+spawn(move || {
+	let x = Box::new(1);
+	tx.send(x); // works!
+});
+
+let x = rx.recv();
+
+	</code></pre>		
+	</section>
+	<section>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+use std::sync::mpsc::*;
+use std::thread::spawn;
+let (tx, rx) = channel();
+
+spawn(move || {
+	let x = Box::new(1);
+	tx.send(&x); // nope
+});
+
+let x = rx.recv();
+
+	</code></pre>
+	</section>
+	<section>
+	<pre><code class="rust" data-trim style="font-size: 18px; margin-top: 20px;">
+use std::sync::mpsc::*;
+use std::thread::spawn;
+use std::rc::Rc;
+let (tx, rx) = channel();
+
+spawn(move || {
+	let x = Rc::new(1);
+	// refcounted pointer
+	// not threadsafe
+	tx.send(x.clone()); // nope
+});
+
+let x = rx.recv();
+
+	</code></pre>
+	</section>
+	<section>
+		<pre style="box-shadow: none">
+test.rs:18:1: 18:6 error: the trait `core::marker::Send` is not implemented for the type `alloc::rc::Rc&lt;i32>` [E0277]
+test.rs:18 spawn(move || {
+           ^~~~~
+test.rs:18:1: 18:6 note: `alloc::rc::Rc&lt;i32>` cannot be sent between threads safely
+test.rs:18 spawn(move || {
+		</pre>
+	</section>
+</section>
+		</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				//theme: "sky", // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
