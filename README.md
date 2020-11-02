@@ -28,4 +28,4 @@ Partagez votre repl avec le bouton en haut à droite "Share" :
 
 <a href="https://ibb.co/pW07xGc"><img src="https://i.ibb.co/Q8bgfzL/reppl2.png" alt="reppl2" border="0"></a>
 
-Envoyez le lien dans le canal Teams
+Envoyez le lien en privé sur Teams
