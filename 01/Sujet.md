@@ -6,7 +6,7 @@ Maintenant que tu as ton environnement de développement crée et que tu sais de
 
 Essayez de lancer `cargo run` pour compiler et lancer le binaire.
 
-Erreur de compilation ??
+Warning de compilation ??
 
 Le RUST a une coding style intégrée et vérifiée à la compilation. Elle force à avoir des noms en `snake_case` pour les variables, les fonctions et les noms de binaires.
 
