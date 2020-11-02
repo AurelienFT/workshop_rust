@@ -28,7 +28,7 @@ Exemple :
 
 [Documentation variables RUST](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html)
 
-Maintenant assignez la valeur `4` à la variable `x`.
+Maintenant assignez la valeur `4` à la variable `x` après l'affichage.
 
 Erreur de compilation ??
 
