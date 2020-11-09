@@ -32,7 +32,7 @@ Utilisez un appel à la fonction `is_two()` avec l'opérateur `?` dans le corps 
 
 ## 3. Le mot clé match
 
-Avec l'opérateur `?` l'erreur renvoyé par `is_four()` est celle de `is_two()` ce qui n'est pas très explicite pour un utilisateur alors il faudrait pouvoir renvoyer une erreur de `is_four()` à la place de celle de `is_two()`. Pour cela utiliser le mot clé `match` pour utiliser le `Result` de `is_two()` dans le fonction `is_four()`.
+Avec l'opérateur `?` l'erreur renvoyé par `is_four()` est celle de `is_two()` ce qui n'est pas très explicite pour un utilisateur alors il faudrait pouvoir renvoyer une erreur de `is_four()` à la place de celle de `is_two()`. Pour cela utiliser le mot clé `match` pour utiliser le `Result` de `is_two()` dans la fonction `is_four()`.
 
 *[Documentation match](https://doc.rust-lang.org/rust-by-example/flow_control/match.html)*
 
