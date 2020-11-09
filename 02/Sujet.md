@@ -68,8 +68,36 @@ Nous allons maintenant voir comment lire un fichier en Rust.
 
 Créez un fichier sur REPL et lisez le dans votre main grâce à *[read_to_string](https://doc.rust-lang.org/std/fs/fn.read_to_string.html)*
 
-## 6. minigrep
+## 6. Les tests
+
+En plus du formatage, de la gestion de tests `cargo` propose aussi d'écrire facilement des tests (unitaires et fonctionnels).
+
+*[Documentation sur l'écriture de tests](https://doc.rust-lang.org/book/ch11-01-writing-tests.html)*
+
+Écrivez des tests pour la fonction `is_four()` pour couvrir les cas suivants :
+
+- Le nombre est un 4.
+- Le nombre est 2.
+- Le nombre n'est pas un 4 ni un 2.
+
+## 7. minigrep
 
 Mettons maintenant en place un exercice pratique qui consiste à créer un grep simplifié. Vous avez acquis toutes les connaissances pour le faire.
 
-Il y a un exemple de comment le faire dans la RUST mais il est trop complexe pour le moment. Essayez de l'implémenter avec ce que vous avez appris.
+Il y a un exemple de comment le faire dans la RUST mais il est trop complexe pour le moment. Essayez de l'implémenter avec tout ce que vous avez appris.
+
+## 8. Les macros
+
+Si vous en êtes arrivés là pendant les 2 heures de workshop c'est que vous avec bien compris les fonctionnalités que l'on a vu et que vous arrivez bien à les utiliser. Amusons-nous un peu.
+
+Les macros permettent d'utiliser l'AST du code et de le modifier pour ajouter des comportements spéciaux. Cela permet de réduire le code à écrire comme par exemple avec la macro `vec!` qui crée un vecteur et ajoute des éléments.
+
+Mais les macros sont aussi très utiles car elles peuvent prendre un nombre variadique d'arguments comme avec `println!` ou `vec!`
+
+Créez une macro (function-like) `is_four()` pour qu'elle test un nombre `x` de chiffre passés en paramètre. Exemple:
+
+`is_four!(3, 4, 5, 1, 2)`
+
+Si un nombre est un 4 elle l'affiche sinon elle affiche `[chiffre] is not a 4`.
+
+*[Documentation sur les macros RUST](https://doc.rust-lang.org/book/ch19-06-macros.html)*
