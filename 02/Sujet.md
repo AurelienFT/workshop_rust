@@ -84,7 +84,7 @@ En plus du formatage, de la gestion de tests `cargo` propose aussi d'écrire fac
 
 Mettons maintenant en place un exercice pratique qui consiste à créer un grep simplifié. Vous avez acquis toutes les connaissances pour le faire.
 
-Il y a un exemple de comment le faire dans la RUST mais il est trop complexe pour le moment. Essayez de l'implémenter avec tout ce que vous avez appris.
+Il y a un exemple de comment le faire dans la documentation RUST mais il est trop complexe pour le moment. Essayez de l'implémenter avec tout ce que vous avez appris.
 
 ## 8. Les macros
 
