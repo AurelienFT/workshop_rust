@@ -6,7 +6,7 @@ Maintenant que vous connaissez les fonctionnalités de bases du Rust nous allons
 
 Pour renvoyer une erreur chaque language a sa façon de faire. En JS, throw ou renvoyé deux variables une avec le résultat l'autre avec l'erreur. En C++ pour chaque type il y a une valeur comme considérée comme valeur d'erreur. Et bien en RUST il y a le `Result`.
 
-Result est un type templaté dans grace auquel vous pouvez fusionner un type de variable de retour et un type de variable d'erreur en un seul type de retour.
+Result est un type templaté grace auquel vous pouvez fusionner un type de variable de retour et un type de variable d'erreur en un seul type de retour.
 
 *[Documentation Result RUST](https://doc.rust-lang.org/std/result/)*
 
