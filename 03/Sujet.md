@@ -50,4 +50,10 @@ Créez un trait `LivingBeings` qui contient la méthode `is_adult()` et impléme
 
 *[Documentation sur les traits](https://doc.rust-lang.org/book/ch10-02-traits.html)*
 
+## 7. Les proc-macros
 
+Les proc-macros en Rust sont utilisés sur les structure pour implémenter beaucoup de traits directement sans que l'utilisateur est tous à les définir.
+
+*[Documentation sur les proc-macros](https://doc.rust-lang.org/book/ch19-06-macros.html?highlight=macros#how-to-write-a-custom-derive-macro)*
+
+Créez une proc macro `Beings` avec comme "paramètre" l'age adulte de l'espece et implémentez automatiquement le trait `LivingBeings` avec la valeur passé en paramètre.
