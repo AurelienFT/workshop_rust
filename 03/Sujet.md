@@ -46,7 +46,7 @@ Ajoutez une structure `Animal` qui a comme champ : `age` de type `i32`, `name` d
 
 Maintenant que nous avons des animaux nous aimerions savoir si ils sont adultes eux aussi, sauf que c'est une méthode de la structure `Human`. On ne peut pas juste dire qu'ils sont adultes à 18 ans, en effet pour eux c'est 7 ans (il faillait un chiffre pour l'exercice).
 
-Créez un trait `LivingBeings` qui contient la méthode `is_adult()` et implémentez là pour les structures `Human` et pour `Animal`. Implémentez aussi un comportement par défaut qui renvoi 0.
+Créez un trait `LivingBeings` qui contient la méthode `is_adult()` et implémentez là pour les structures `Human` et pour `Animal`. Implémentez aussi un comportement par défaut qui renvoi `false`.
 
 *[Documentation sur les traits](https://doc.rust-lang.org/book/ch10-02-traits.html)*
 
