@@ -10,7 +10,7 @@ Pour commencez déclarez une structure `Human` cette structure devra avoir 3 cha
 
 ## 2. Le mot clé `enum`
 
-En plus des structures le Rust à aussi un mot-clé pour définir une énumération. Pour faciliter le traitement de données de notre structure `Human`, créez une énumeration `Situtation` avec comme valeurs possibles : `EMPLOYEE`, `STUDENT`, `KID`, `BOSS` et changez le champ `situation` pour qu'il soit du type `Situation`.
+En plus des structures le Rust à aussi un mot-clé pour définir une énumération. Pour faciliter le traitement de données de notre structure `Human`, créez une énumeration `Situation` avec comme valeurs possibles : `EMPLOYEE`, `STUDENT`, `KID`, `BOSS` et changez le champ `situation` pour qu'il soit du type `Situation`.
 
 *[Documentation RUST énumération](https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html)*
 
