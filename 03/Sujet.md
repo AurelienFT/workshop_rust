@@ -56,4 +56,4 @@ Les proc-macros en Rust sont utilisés sur les structure pour implémenter beauc
 
 *[Documentation sur les proc-macros](https://doc.rust-lang.org/book/ch19-06-macros.html?highlight=macros#how-to-write-a-custom-derive-macro)*
 
-Créez une proc macro `Beings` avec comme "paramètre" l'age adulte de l'espece et implémentez automatiquement le trait `LivingBeings` avec la valeur passé en paramètre.
+Créez une proc macro `Beings` avec comme "paramètre" l'age adulte de l'espece et implémentez automatiquement le trait `LivingBeings` avec la valeur passé en paramètre. (en utilisant syn et quote)
